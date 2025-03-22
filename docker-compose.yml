@@ -19,22 +19,24 @@ services:
     ports:
       - "5433:5432"
 
-  # productos-api:
-  #   build: ./ProductosService
-  #   ports:
-  #     - "5002:80"
-  #   depends_on:
-  #     - productos-db
+  productos-api:
+    build: ./ProductosService
+    ports:
+      - "5002:8080"
+    depends_on:
+      - productos-db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
 
-  # productos-db:
-  #   image: postgres
-  #   container_name: productos-db
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: 1234
-  #     POSTGRES_DB: productosdb
-  #   ports:
-  #     - "5434:5432"
+  productos-db:
+    image: postgres
+    container_name: productos-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: productosdb
+    ports:
+      - "5434:5432"
 
   # ventas-api:
   #   build: ./VentasService
