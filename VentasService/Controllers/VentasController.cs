@@ -23,7 +23,7 @@ public class VentasController : ControllerBase
     public async Task<IActionResult> CrearVenta([FromBody] VentaRequest request)
     {
         // 1. Validar que el cliente exista
-        var clienteResponse = await _http.GetAsync($"http://clientes-api:80/api/clientes/{request.ClienteId}");
+        var clienteResponse = await _http.GetAsync($"http://clientes-api:8080/api/clientes/{request.ClienteId}");
         if (!clienteResponse.IsSuccessStatusCode)
             return BadRequest("El cliente no existe");
 
@@ -33,7 +33,7 @@ public class VentasController : ControllerBase
         // 2. Validar cada producto y calcular totales
         foreach (var item in request.Items)
         {
-            var productoResponse = await _http.GetAsync($"http://productos-api:80/api/productos/{item.ProductoId}");
+            var productoResponse = await _http.GetAsync($"http://productos-api:8080/api/productos/{item.ProductoId}");
             if (!productoResponse.IsSuccessStatusCode)
                 return BadRequest($"Producto con ID {item.ProductoId} no encontrado");
 
@@ -58,7 +58,9 @@ public class VentasController : ControllerBase
             var descontar = new { cantidad = item.Cantidad };
             var content = new StringContent(JsonSerializer.Serialize(descontar), System.Text.Encoding.UTF8, "application/json");
 
-            await _http.PutAsync($"http://productos-api:80/api/productos/{item.ProductoId}/descontar", content);
+            Console.WriteLine($"Descontando stock para producto {item.ProductoId} +++++ {content}");
+            var response = await _http.PutAsync($"http://productos-api:8080/api/productos/{item.ProductoId}/descontar", content);
+            Console.WriteLine($"Resultado: {response.StatusCode}");
         }
 
         // 4. Crear venta y guardar en la base de datos
@@ -73,7 +75,17 @@ public class VentasController : ControllerBase
         _context.Ventas.Add(venta);
         await _context.SaveChangesAsync();
 
-        return Ok(new { venta.Id, venta.Total });
+        return Ok(new { venta.Id, venta.Total});
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Venta>>> GetVentas()
+    {
+        var ventas = await _context.Ventas
+            .Include(v => v.Detalles)
+            .ToListAsync();
+
+        return Ok(ventas);
     }
 
 }
