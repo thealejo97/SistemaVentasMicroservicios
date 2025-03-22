@@ -1,0 +1,12 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS migrator
+
+WORKDIR /src
+COPY . .
+
+# Instalar dotnet-ef CLI tool globalmente
+RUN dotnet tool install --global dotnet-ef \
+ && export PATH="$PATH:/root/.dotnet/tools" \
+ && dotnet ef database update
+
+# Necesario para que el contenedor no se detenga inmediatamente (opcional, para debugging)
+CMD ["tail", "-f", "/dev/null"]

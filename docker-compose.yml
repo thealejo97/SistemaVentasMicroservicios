@@ -44,6 +44,8 @@ services:
       - "5003:8080"
     depends_on:
       - ventas-db
+      - clientes-api
+      - productos-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
 

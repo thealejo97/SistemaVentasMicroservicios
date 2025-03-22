@@ -1,4 +1,4 @@
-
+using ProductosService.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductosService.Data;
@@ -11,6 +11,7 @@ namespace ProductosService.Controllers;
 public class ProductosController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly HttpClient _http;
 
     public ProductosController(AppDbContext context)
     {
@@ -78,6 +79,21 @@ public class ProductosController : ControllerBase
             return NotFound();
 
         _context.Productos.Remove(producto);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [HttpPut("{id}/descontar")]
+    public async Task<IActionResult> DescontarStock(int id, [FromBody] DescontarStockDTO dto)
+    {
+        var producto = await _context.Productos.FindAsync(id);
+        if (producto == null) return NotFound();
+
+        if (producto.Stock < dto.Cantidad)
+            return BadRequest("Stock insuficiente");
+
+        producto.Stock -= dto.Cantidad;
         await _context.SaveChangesAsync();
 
         return NoContent();
