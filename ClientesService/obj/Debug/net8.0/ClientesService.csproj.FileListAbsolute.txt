@@ -133,3 +133,4 @@ C:\Users\usuario\Documents\proyectos\SistemaVentasMicroservicios\ClientesService
 C:\Users\usuario\Documents\proyectos\SistemaVentasMicroservicios\ClientesService\obj\Debug\net8.0\ClientesService.pdb
 C:\Users\usuario\Documents\proyectos\SistemaVentasMicroservicios\ClientesService\obj\Debug\net8.0\ClientesService.genruntimeconfig.cache
 C:\Users\usuario\Documents\proyectos\SistemaVentasMicroservicios\ClientesService\obj\Debug\net8.0\ref\ClientesService.dll
+C:\Users\usuario\Documents\proyectos\SistemaVentasMicroservicios\ClientesService\obj\Debug\net8.0\ClientesService.sourcelink.json

@@ -14,7 +14,7 @@ services:
     container_name: clientes-db
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
+      POSTGRES_PASSWORD: Univalle12
       POSTGRES_DB: clientesdb
     ports:
       - "5433:5432"
@@ -33,24 +33,26 @@ services:
     container_name: productos-db
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
+      POSTGRES_PASSWORD: Univalle12
       POSTGRES_DB: productosdb
     ports:
       - "5434:5432"
 
-  # ventas-api:
-  #   build: ./VentasService
-  #   ports:
-  #     - "5003:80"
-  #   depends_on:
-  #     - ventas-db
+  ventas-api:
+    build: ./VentasService
+    ports:
+      - "5003:8080"
+    depends_on:
+      - ventas-db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
 
-  # ventas-db:
-  #   image: postgres
-  #   container_name: ventas-db
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: 1234
-  #     POSTGRES_DB: ventasdb
-  #   ports:
-  #     - "5435:5432"
+  ventas-db:
+    image: postgres
+    container_name: ventas-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Univalle12
+      POSTGRES_DB: ventasdb
+    ports:
+      - "5435:5432"
